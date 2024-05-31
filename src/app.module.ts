@@ -3,9 +3,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TasksModule } from './tasks/tasks.module';
 import { UsersModule } from './users/users.module';
 import { JwtModule } from '@nestjs/jwt';
+import { AuthModule } from './auth/auth.module'
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({isGlobal: true}),
+    AuthModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -17,11 +21,12 @@ import { JwtModule } from '@nestjs/jwt';
       synchronize: true,
     }),
     JwtModule.register({
-      secret: process.env.secret_key, 
+      secret: process.env.SECRET_KEY, 
       signOptions: { expiresIn: '1d' }, 
     }),
     TasksModule,
     UsersModule,
+    // SessionModule, // Add the SessionModule here
   ],
   controllers: [],
   providers: [],

@@ -4,7 +4,9 @@ import { ValidationPipe } from '@nestjs/common';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as passport from 'passport';
-
+import * as session from 'express-session';
+import * as dotenv from 'dotenv';
+dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -16,9 +18,17 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors(corsOptions);
-
+  app.use(
+    session({
+      secret: 'your_secret_key',
+      resave: false,
+      saveUninitialized: false,
+      cookie: {secure: false}
+    })
+    );
   app.use(passport.initialize());
   app.use(passport.session());
+  
 
   const options = new DocumentBuilder()
     .setTitle('Your API')
