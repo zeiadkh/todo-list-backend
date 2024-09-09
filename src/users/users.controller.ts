@@ -1,30 +1,38 @@
-import { Controller, Post, Body, UseGuards, Request, BadRequestException } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { User } from './user.entity';
-import { AuthService } from '../auth/auth.service';
-import { JwtStrategy } from 'src/auth/jwt.strategy';
-import { IsEmail, IsString, IsNotEmpty, IsOptional } from 'class-validator';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Request,
+  BadRequestException,
+  Get,
+} from '@nestjs/common'
+import { UsersService } from './users.service'
+import { User } from './user.entity'
+import { AuthService } from '../auth/auth.service'
+import { JwtStrategy } from 'src/auth/jwt.strategy'
+import { IsEmail, IsString, IsNotEmpty, IsOptional, isArray } from 'class-validator'
+import { Task } from 'src/tasks/task.entity'
+import { UserRequest } from 'src/tasks/tasks.controller'
+import { AuthGuard } from '@nestjs/passport'
 
 export class UserValidatior extends User {
   @IsString()
   @IsNotEmpty()
-  username: string;
+  username: string
 
   @IsEmail()
-  email: string;
+  email: string
 
   @IsString()
   @IsNotEmpty()
-  password: string;
+  password: string
 
   @IsString()
   @IsNotEmpty()
-  confirmPassword: string;
+  confirmPassword: string
 
-  
-}
-interface RequestWithUser extends Request {
-  user: any
+  tasks: Task[] | []
 }
 
 @Controller('users')
@@ -35,26 +43,28 @@ export class UsersController {
   ) {}
 
   @Post('register')
-  async register(@Body() user: UserValidatior): Promise<User> {
-    const existingUser = await this.usersService.findByUsername(user.username);
+  async register(@Body() user: UserValidatior): Promise<any> {
+    const existingUser = await this.usersService.findByUsername(user.username)
     const confirmPassword = user.password === user.confirmPassword
     if (!confirmPassword) throw new BadRequestException("Passord & confirmed Password didn't match")
-    
-    if (existingUser) {
-      throw new BadRequestException('Username is already taken');
-    }
 
-    return this.usersService.createUser(user);
+    if (existingUser) {
+      throw new BadRequestException('Username is already taken')
+    }
+    user = { ...user, tasks: [] }
+    return this.usersService.createUser(user)
   }
 
-  
   @Post('login')
   @UseGuards(JwtStrategy)
-  async login(@Body() user:{username: string, password: string}): Promise<{ access_token: string }> {
-    
-    // console.log()
-    // At this point, req.user contains the authenticated user
-    //this.authService.login(req.user);
+  async login(
+    @Body() user: { username: string; password: string },
+  ): Promise<{ access_token: string }> {
     return this.authService.validateUser(user.username, user.password)
+  }
+  @Get()
+  @UseGuards(AuthGuard('jwt'))
+  async getAllUsers(@Request() req: UserRequest): Promise<User | undefined> {
+    return this.usersService.findByUsername(req.user.username)
   }
 }

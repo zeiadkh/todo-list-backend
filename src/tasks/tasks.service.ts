@@ -10,8 +10,12 @@ export class TasksService {
     private readonly taskRepository: Repository<Task>,
   ) {}
 
-  async findAll(): Promise<Task[]> {
-    return this.taskRepository.find()
+  async findAll(where?: {}): Promise<Task[]> {
+    return this.taskRepository.find(where)
+  }
+
+  async find(where: {}): Promise<Task> {
+    return this.taskRepository.findOneBy(where)
   }
 
   async create(task: Task): Promise<Task> {

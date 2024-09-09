@@ -13,7 +13,7 @@ export class AuthService {
 
   async validateUser(username: string, password: string): Promise<any> {
     const user = await this.usersService.findByUsername(username);
-    console.log(user)
+    // console.log(user)
     if(!user) throw new BadRequestException("User Not found")
     if (user.password === password) {
       const { password, ...result } = user;
@@ -25,10 +25,10 @@ export class AuthService {
   }
 
   async login(user: any): Promise<{ access_token: string }> {
-    console.log(user)
-    const payload = { username: user.username, sub: user.userId };
+    // console.log(user)
+    const payload = { username: user.username, sub: user.id };
     const secret = this.config.get("JWT_SECRET");
-    const access_token = await this.jwtService.signAsync(payload, { expiresIn: '1d', secret });
+    const access_token = await this.jwtService.signAsync(payload, { expiresIn: '3d', secret });
     return { access_token };
   }
 }
