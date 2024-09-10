@@ -3,9 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TasksModule } from './tasks/tasks.module';
 import { UsersModule } from './users/users.module';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthModule } from './auth/auth.module'
+import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-
+import { SessionModule } from './session/session.module'; 
 
 @Module({
   imports: [
@@ -32,6 +32,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     TasksModule,
     UsersModule,
     ConfigModule.forRoot({isGlobal: true}),
+    SessionModule,
   ],
   controllers: [],
   providers: [],
