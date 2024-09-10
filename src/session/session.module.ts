@@ -1,16 +1,23 @@
 import { Module } from '@nestjs/common';
 import * as session from 'express-session';
-
+import { ConfigModule, ConfigService } from '@nestjs/config';
 @Module({
+  imports: [ConfigModule],
+
   providers: [
     {
       provide: 'SESSION',
-      useValue: session({
-        secret: process.env.SECRET_KEY,
-        resave: false,
-        saveUninitialized: false,
-        cookie: { secure: false }, // Adjust this based on your environment (e.g., true for HTTPS)
-      }),
+      useFactory: (configService: ConfigService) => {
+
+        return session({
+          secret: configService.get('SECRET_KEY'),
+          resave: false,
+          saveUninitialized: false,
+          cookie: { secure: false }, // Adjust this based on your environment (e.g., true for HTTPS)
+        
+        });
+      },
+    inject: [ConfigService],
     },
   ],
   exports: ['SESSION'],
