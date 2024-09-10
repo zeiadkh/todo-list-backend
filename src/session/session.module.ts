@@ -10,7 +10,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       useFactory: (configService: ConfigService) => {
 
         return session({
-          secret: configService.get('SECRET_KEY'),
+          secret: configService.get('JWT_SECRET'),
           resave: false,
           saveUninitialized: false,
           cookie: { secure: false }, // Adjust this based on your environment (e.g., true for HTTPS)
