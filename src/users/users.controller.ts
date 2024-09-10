@@ -15,6 +15,7 @@ import { IsEmail, IsString, IsNotEmpty, IsOptional, isArray } from 'class-valida
 import { Task } from 'src/tasks/task.entity'
 import { UserRequest } from 'src/tasks/tasks.controller'
 import { AuthGuard } from '@nestjs/passport'
+import * as bcrypt from "bcryptjs"
 
 export class UserValidatior extends User {
   @IsString()
@@ -51,9 +52,11 @@ export class UsersController {
     if (existingUser) {
       throw new BadRequestException('Username is already taken')
     }
-    user = { ...user, tasks: [] }
+    user = { ...user, tasks: [], password: bcrypt.hashSync(user.password)}
     return this.usersService.createUser(user)
   }
+
+
 
   @Post('login')
   @UseGuards(JwtStrategy)

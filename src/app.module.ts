@@ -4,21 +4,26 @@ import { TasksModule } from './tasks/tasks.module';
 import { UsersModule } from './users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthModule } from './auth/auth.module'
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+
 
 @Module({
   imports: [
-    ConfigModule.forRoot({isGlobal: true}),
     AuthModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'pass',
-      database: 'todo-app-db',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get("DATABASE_HOST"),
+        port: configService.get("DATABASE_PORT"),
+        username: configService.get("DB_USERNAME"),
+        password: configService.get('DB_PASSWORD'),
+        database: 'todoz-db',
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        synchronize: true,
+        ssl: { rejectUnauthorized: false }
+      })
     }),
     JwtModule.register({
       secret: process.env.SECRET_KEY, 
@@ -26,7 +31,7 @@ import { ConfigModule } from '@nestjs/config';
     }),
     TasksModule,
     UsersModule,
-    // SessionModule, // Add the SessionModule here
+    ConfigModule.forRoot({isGlobal: true}),
   ],
   controllers: [],
   providers: [],
