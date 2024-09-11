@@ -5,7 +5,7 @@ import { UsersModule } from './users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { SessionModule } from './session/session.module'; 
+// import { SessionModule } from './session/session.module'; 
 
 @Module({
   imports: [
@@ -32,7 +32,7 @@ import { SessionModule } from './session/session.module';
     TasksModule,
     UsersModule,
     ConfigModule.forRoot({isGlobal: true}),
-    SessionModule,
+    // SessionModule,
   ],
   controllers: [],
   providers: [],

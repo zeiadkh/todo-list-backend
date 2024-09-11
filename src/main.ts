@@ -5,7 +5,7 @@ import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.int
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as passport from 'passport';
 import * as dotenv from 'dotenv';
-import * as session from 'express-session';
+import session from 'express-session';
 import { ConfigService } from '@nestjs/config';
 
 dotenv.config();
@@ -23,17 +23,17 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors(corsOptions);
 
-  app.use(
-    session({
-      secret: configService.get<string>('JWT_SECRET') ,
-      resave: false,
-      saveUninitialized: false,
-      cookie: { secure: false }, // Adjust based on your environment
-    })
-  );
+  // app.use(
+  //   session({
+  //     secret: configService.get<string>('JWT_SECRET') ,
+  //     resave: false,
+  //     saveUninitialized: false,
+  //     cookie: { secure: false }, // Adjust based on your environment
+  //   })
+  // );
 
   app.use(passport.initialize());
-  app.use(passport.session());
+  // app.use(passport.session());
 
   const options = new DocumentBuilder()
     .setTitle('Your API')
