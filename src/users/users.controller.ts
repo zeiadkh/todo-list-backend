@@ -68,6 +68,6 @@ export class UsersController {
   @Get()
   @UseGuards(AuthGuard('jwt'))
   async getAllUsers(@Request() req: UserRequest): Promise<User | undefined> {
-    return this.usersService.findByUsername(req.user.username)
+    return this.usersService.findUserName(req.user.username)
   }
 }
