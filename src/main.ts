@@ -12,7 +12,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   const corsOptions: CorsOptions = {
-    origin: configService.get("React_App_URL"),
+    origin: configService.get("REACT_APP_URL"),
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   };
