@@ -1,4 +1,3 @@
-import { config } from 'dotenv';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
@@ -6,13 +5,13 @@ import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.int
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
+  console.log(configService.get("REACT_APP_URL"))
 
   const corsOptions: CorsOptions = {
-    origin: configService.get("REACT_APP_URL"),
+    origin: ['https://todoz-zk.vercel.app'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   };
