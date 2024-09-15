@@ -11,9 +11,10 @@ async function bootstrap() {
   console.log(configService.get("REACT_APP_URL"))
 
   const corsOptions: CorsOptions = {
-    origin: ['https://todoz-zk.vercel.app'],
+    origin: configService.get("REACT_APP_URL"),
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
   };
 
   app.useGlobalPipes(new ValidationPipe());
