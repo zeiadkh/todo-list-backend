@@ -1,21 +1,18 @@
+import { config } from 'dotenv';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as passport from 'passport';
-import * as dotenv from 'dotenv';
-import session from 'express-session';
 import { ConfigService } from '@nestjs/config';
 
-dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
   const corsOptions: CorsOptions = {
-    origin: '*',
+    origin: configService.get("React_App_URL"),
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   };
