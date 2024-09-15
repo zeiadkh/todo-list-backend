@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TasksModule } from './tasks/tasks.module';
 import { UsersModule } from './users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PreflightMiddleware } from './preflight/preflight.middleware';
 // import { SessionModule } from './session/session.module'; 
 
 @Module({
@@ -37,4 +38,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule {configure(consumer: MiddlewareConsumer) {
+  consumer
+    .apply(PreflightMiddleware)
+    .forRoutes({ path: '*', method: RequestMethod.OPTIONS });
+}}
