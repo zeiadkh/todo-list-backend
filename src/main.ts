@@ -8,10 +8,9 @@ import { ConfigService } from '@nestjs/config';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
-  console.log(configService.get("REACT_APP_URL"))
 
   const corsOptions: CorsOptions = {
-    origin: configService.get("REACT_APP_URL"),
+    origin: ['https://todoz-zk.vercel.app'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -42,7 +41,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(3001);
+  await app.listen(configService.get("BACKEND_PORT"));
 }
 
 bootstrap();
