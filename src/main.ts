@@ -11,7 +11,7 @@ async function bootstrap() {
 
   const corsOptions: CorsOptions = {
     origin: ['https://todoz-zk.vercel.app'],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
   };
