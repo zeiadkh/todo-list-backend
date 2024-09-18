@@ -2,7 +2,8 @@
 
 Welcome to my first project using **NestJS** and **PostgreSQL**! This repository showcases my work as I learn and implement a backend system using these technologies. Below, you'll find an overview of the project, setup instructions, and other important details.
 
-![apis-swagger](https://drive.google.com/file/d/19KFOEKTb9bZBGIS0MC1yVVMkM84AaXCK/view?usp=sharing)
+<img width="880" alt="todo-swagger" src="https://github.com/user-attachments/assets/8227333b-729a-4be8-b888-14fa9f36249d">
+
 
 ## Table of Contents
 - [Project Overview](#project-overview)
